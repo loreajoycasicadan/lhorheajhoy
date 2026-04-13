@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Medical Records</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="records-container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>Medical Records</h1>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search by patient name or ID...">
+            <button onclick="searchRecords()">Search</button>
+        </div>
+        <button class="add-btn" onclick="addNewRecord()">+ Add Record</button>
+    </div>
+
+    <!-- FILTER SECTION -->
+    <div class="filter-section">
+        <select id="departmentFilter" onchange="filterRecords()">
+            <option value="">All Departments</option>
+            <option value="Cardiology">Cardiology</option>
+            <option value="Neurology">Neurology</option>
+            <option value="Orthopedics">Orthopedics</option>
+            <option value="Pediatrics">Pediatrics</option>
+            <option value="General">General</option>
+        </select>
+
+        <select id="statusFilter" onchange="filterRecords()">
+            <option value="">All Status</option>
+            <option value="Active">Active</option>
+            <option value="Completed">Completed</option>
+            <option value="Pending">Pending</option>
+        </select>
+    </div>
+
+    <!-- RECORDS TABLE -->
+    <div class="records-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>Patient Name</th>
+                    <th>Date of Birth</th>
+                    <th>Department</th>
+                    <th>Diagnosis</th>
+                    <th>Visit Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="recordsBody">
+                <tr>
+                    <td>MR-001</td>
+                    <td>John Smith</td>
+                    <td>05/15/1985</td>
+                    <td>Cardiology</td>
+                    <td>Hypertension</td>
+                    <td>04/10/2026</td>
+                    <td>Active</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="view-btn" onclick="viewRecord('MR-001')">View</button>
+                            <button class="edit-btn" onclick="editRecord('MR-001')">Edit</button>
+                            <button class="delete-btn" onclick="deleteRecord('MR-001')">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>MR-002</td>
+                    <td>Sarah Johnson</td>
+                    <td>08/22/1990</td>
+                    <td>Neurology</td>
+                    <td>Migraine Disorder</td>
+                    <td>04/09/2026</td>
+                    <td>Completed</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="view-btn" onclick="viewRecord('MR-002')">View</button>
+                            <button class="edit-btn" onclick="editRecord('MR-002')">Edit</button>
+                            <button class="delete-btn" onclick="deleteRecord('MR-002')">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>MR-003</td>
+                    <td>Michael Brown</td>
+                    <td>03/10/1978</td>
+                    <td>Orthopedics</td>
+                    <td>Knee Injury</td>
+                    <td>04/08/2026</td>
+                    <td>Active</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="view-btn" onclick="viewRecord('MR-003')">View</button>
+                            <button class="edit-btn" onclick="editRecord('MR-003')">Edit</button>
+                            <button class="delete-btn" onclick="deleteRecord('MR-003')">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>MR-004</td>
+                    <td>Emma Davis</td>
+                    <td>12/30/2015</td>
+                    <td>Pediatrics</td>
+                    <td>Asthma</td>
+                    <td>04/07/2026</td>
+                    <td>Pending</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="view-btn" onclick="viewRecord('MR-004')">View</button>
+                            <button class="edit-btn" onclick="editRecord('MR-004')">Edit</button>
+                            <button class="delete-btn" onclick="deleteRecord('MR-004')">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>MR-005</td>
+                    <td>Robert Wilson</td>
+                    <td>07/05/1995</td>
+                    <td>General</td>
+                    <td>Routine Checkup</td>
+                    <td>04/11/2026</td>
+                    <td>Active</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="view-btn" onclick="viewRecord('MR-005')">View</button>
+                            <button class="edit-btn" onclick="editRecord('MR-005')">Edit</button>
+                            <button class="delete-btn" onclick="deleteRecord('MR-005')">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+    function searchRecords() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.getElementById('recordsBody').getElementsByTagName('tr');
+
+        for (let row of rows) {
+            const cells = row.getElementsByTagName('td');
+            let found = false;
+
+            for (let cell of cells) {
+                if (cell.textContent.toLowerCase().includes(searchInput)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            row.style.display = found ? '' : 'none';
+        }
+    }
+
+    function filterRecords() {
+        const department = document.getElementById('departmentFilter').value;
+        const status = document.getElementById('statusFilter').value;
+        const rows = document.getElementById('recordsBody').getElementsByTagName('tr');
+
+        for (let row of rows) {
+            const cells = row.getElementsByTagName('td');
+            const deptCell = cells[3].textContent;
+            const statusCell = cells[6].textContent;
+
+            let showRow = true;
+
+            if (department && deptCell !== department) {
+                showRow = false;
+            }
+
+            if (status && statusCell !== status) {
+                showRow = false;
+            }
+
+            row.style.display = showRow ? '' : 'none';
+        }
+    }
+
+    function viewRecord(recordId) {
+        alert('Viewing record: ' + recordId);
+        // Implement view functionality
+    }
+
+    function editRecord(recordId) {
+        alert('Editing record: ' + recordId);
+        // Implement edit functionality
+    }
+
+    function deleteRecord(recordId) {
+        if (confirm('Are you sure you want to delete this record?')) {
+            alert('Record ' + recordId + ' deleted successfully');
+            // Implement delete functionality
+        }
+    }
+
+    function addNewRecord() {
+        alert('Opening form to add new medical record');
+        // Implement add new record functionality
+    }
+</script>
+
+</body>
+</html>
