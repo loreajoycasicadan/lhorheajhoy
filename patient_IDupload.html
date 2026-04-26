@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload 2x2 Picture of the Patient</title>
+</head>
+<body>
+    <form class="upload-container" action="">
+        <h2>Upload 2x2 Picture of the Patient</h2>
+
+        <input type="file" id="picUpload" accept=".png, .jpg, .jpeg" required>
+        <div style="margin-top: 5vh;">
+            <p>Preview (2x2) *.png .jpg .jpeg</p> <!--adjust this to make it italicized in css styling-->
+            <canvas id="convertCanvas" width="600" height="600" style="border: 1px solid #ccc; width: 200px; height: 200px;"></canvas>
+        </div>
+
+        <script>
+            document.getElementById('picUpload').onchange = function(e){
+                const file = e.target.files[0]
+                if(!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(event){
+                    const img = new Image();
+                    img.onload = function(){
+                        const canvas = document.getElementById('convertCanvas');
+                        const ctx = canvas.getContext('2d');
+
+                        //convert to 2x2
+                        ctx.drawImage(img, 0, 0, 600, 600);
+
+                        //convert the canvas to file or url
+                        const convertedImage = canvas.toDataURL("image/jpeg");
+                        console.log("Image successfully converted to 2x2!"); 
+                    };
+                    img.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        </script>
+
+        <div class="button-group">
+            <a href="emergency.html" class="btn">Back</a>
+            <button type="submit" class="btn">Next</button>
+        </div>
+
+    </form>
+</body>
+</html>
